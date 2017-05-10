@@ -1,0 +1,88 @@
+<!doctype html>
+<html ng-app="myApp">
+	<head>
+		<meta charset="utf-8" />
+
+		<title>
+			Using reactive design pattern to subscribe and notify event in AngularJS
+		</title>
+
+	</head>
+	<body>
+
+		<div ng-app="myApp">
+	    <div ng-controller="Ctrl1">
+				<div>
+					The current button1 count is: {{button1Count}}
+				</div>
+				<div>
+					The current button2 count is: {{button2Count}}
+				</div>
+	    </div>
+
+	    <div ng-controller="Ctrl2">
+				<button ng-click="button1Clicked()">Click Button 1</button>
+	    </div>
+
+			<div ng-controller="Ctrl3">
+				<button ng-click="button2Clicked()">Click Button 2</button>
+	    </div>
+		</div>
+
+		<!-- Load scripts. -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+		<script type="text/javascript">
+
+			var myApp = angular.module('myApp', []);
+
+			myApp.factory('reactiveSrvc', ['$http', function($http) {
+			    var _reactiveSrvc = {
+						_eventList: {},
+				    subscribe: function (event, callback) {
+							if (!this._eventList[event]) {
+								this._eventList[event] = [];
+							}
+							this._eventList[event].push(callback);
+							return true;
+				    },
+						notify: function (event) {
+							if (!this._eventList[event]) {
+								return false;
+							} else {
+								this._eventList[event].forEach(function(callback) {
+									callback();
+								})
+							}
+				      return true;
+				    }
+					};
+			    return _reactiveSrvc;
+			}]);
+
+			myApp.controller('Ctrl1', ['$scope', 'reactiveSrvc', function ($scope, reactiveSrvc) {
+				$scope.button1Count = 1;
+		    reactiveSrvc.subscribe('button1Clicked', function () {
+		        $scope.button1Count++;
+		    });
+
+				$scope.button2Count = 1;
+		    reactiveSrvc.subscribe('button2Clicked', function () {
+		        $scope.button2Count++;
+		    });
+			}]);
+
+			myApp.controller('Ctrl2', ['$scope', 'reactiveSrvc', function ($scope, reactiveSrvc) {
+				$scope.button1Clicked = function () {
+		        reactiveSrvc.notify('button1Clicked');
+		    };
+			}]);
+
+			myApp.controller('Ctrl3', ['$scope', 'reactiveSrvc', function ($scope, reactiveSrvc) {
+				$scope.button2Clicked = function () {
+		        reactiveSrvc.notify('button2Clicked');
+		    };
+			}]);
+		</script>
+
+	</body>
+</html>

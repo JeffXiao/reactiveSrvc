@@ -18,4 +18,7 @@ $scope.button1Clicked = function () {
   reactiveSrvc.notify('button1Clicked');
 };
 
+Here is the demo:
+https://jeffxiao.github.io/reactiveSrvc/index.html
+
 It is very simple to use. Enjoy!

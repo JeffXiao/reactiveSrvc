@@ -19,6 +19,6 @@ $scope.button1Clicked = function () {
 };
 
 Here is the demo:
-https://jeffxiao.github.io/reactiveSrvc/index.html
+<a href="https://jeffxiao.github.io/reactiveSrvc/index.html" rel="nofollow">Demo</a>
 
 It is very simple to use. Enjoy!
